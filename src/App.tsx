@@ -3,6 +3,7 @@ import { ImpactProvider, useImpact } from './context/ImpactContext';
 import { Header } from './components/Header';
 import { NewsFeed } from './components/NewsFeed';
 import { RewardsStore } from './components/RewardsStore';
+import { Leaderboard } from './components/Leaderboard';
 import { ActionModal } from './components/ActionModal';
 import { LocationPickerModal } from './components/LocationPickerModal';
 import { WalletHistoryModal } from './components/WalletHistoryModal';
@@ -21,6 +22,7 @@ const AppContent: React.FC = () => {
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         {activeTab === 'feed' && <NewsFeed />}
         {activeTab === 'rewards' && <RewardsStore />}
+        {activeTab === 'leaderboard' && <Leaderboard />}
       </main>
 
       {/* Global Modals & Notifications */}
@@ -49,6 +51,13 @@ const AppContent: React.FC = () => {
             </span>
             <span>•</span>
             <span>Proof-of-Action Anti-Foulplay System</span>
+            <span>•</span>
+            <button
+              onClick={() => setActiveTab('leaderboard')}
+              className="hover:text-emerald-500 font-semibold transition-colors"
+            >
+              Champions Leaderboard
+            </button>
             <span>•</span>
             <button
               onClick={() => setActiveTab('rewards')}

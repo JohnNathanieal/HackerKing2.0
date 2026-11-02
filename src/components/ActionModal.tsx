@@ -21,6 +21,7 @@ import {
 import { useImpact } from '../context/ImpactContext';
 import { calculateDistanceKm, evaluateQuiz, checkDailyPointLimit } from '../utils/impactLogic';
 import { NewsStory } from '../types/impact';
+import { SocialShareSection } from './SocialShareSection';
 
 interface ActionModalContentProps {
   story: NewsStory;
@@ -38,6 +39,9 @@ const ActionModalContent: React.FC<ActionModalContentProps> = ({ story, onClose 
   } = useImpact();
 
   const isAlreadyClaimed = wallet.claimedArticleIds.includes(story.id);
+
+  // Social Share toggle state
+  const [showShareSection, setShowShareSection] = useState(isAlreadyClaimed);
 
   // Track switcher: 'yourself' | 'community' | 'verify'
   const [activeTrack, setActiveTrack] = useState<'yourself' | 'community' | 'verify'>('yourself');
@@ -176,6 +180,8 @@ const ActionModalContent: React.FC<ActionModalContentProps> = ({ story, onClose 
         title: 'Claim Denied',
         message: result.error || 'Verification criteria not met.',
       });
+    } else {
+      setShowShareSection(true);
     }
   };
 
@@ -204,13 +210,29 @@ const ActionModalContent: React.FC<ActionModalContentProps> = ({ story, onClose 
             </h2>
           </div>
 
-          <button
-            onClick={onClose}
-            className="p-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-white/10 transition-colors shrink-0"
-            aria-label="Close action modal"
-          >
-            <X className="w-6 h-6" />
-          </button>
+          <div className="flex items-center gap-1.5 shrink-0">
+            <button
+              onClick={() => setShowShareSection((prev) => !prev)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                showShareSection
+                  ? 'bg-emerald-500 text-white shadow-xs'
+                  : 'bg-white/15 hover:bg-white/25 text-white'
+              }`}
+              title="Share this civic action on WhatsApp or Twitter"
+              aria-label="Share this civic action on WhatsApp or Twitter"
+            >
+              <Share2 className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Share</span>
+            </button>
+
+            <button
+              onClick={onClose}
+              className="p-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-white/10 transition-colors shrink-0"
+              aria-label="Close action modal"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </div>
         </div>
 
         {/* Reward & Anti-Foulplay Banner in Header */}
@@ -284,6 +306,15 @@ const ActionModalContent: React.FC<ActionModalContentProps> = ({ story, onClose 
 
       {/* Scrollable Modal Content */}
       <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-6">
+        {/* Social Media Sharing Showcase (Twitter / WhatsApp / Copy) */}
+        {(showShareSection || isAlreadyClaimed) && (
+          <SocialShareSection
+            story={story}
+            isCompleted={isAlreadyClaimed}
+            completedTasks={Object.keys(checkedItems).filter((k) => checkedItems[k])}
+          />
+        )}
+
         {/* TRACK 1: HELP YOURSELF */}
         {activeTrack === 'yourself' && (
           <div className="space-y-5 animate-in fade-in duration-200">
@@ -706,17 +737,26 @@ const ActionModalContent: React.FC<ActionModalContentProps> = ({ story, onClose 
       {/* Modal Footer: Verification Checklist & Claim Button */}
       <div className="p-4 sm:p-5 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/90 shrink-0">
         {isAlreadyClaimed ? (
-          <div className="flex items-center justify-between w-full">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 w-full">
             <div className="flex items-center gap-2 text-xs font-bold text-emerald-600 dark:text-emerald-400">
-              <CheckCircle2 className="w-5 h-5" />
-              <span>Points already claimed for this news event.</span>
+              <CheckCircle2 className="w-5 h-5 shrink-0" />
+              <span>Civic points claimed & verified for this story.</span>
             </div>
-            <button
-              onClick={onClose}
-              className="px-4 py-2 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-200 hover:bg-slate-300 transition-colors"
-            >
-              Close
-            </button>
+            <div className="flex items-center gap-2 w-full sm:w-auto">
+              <button
+                onClick={() => setShowShareSection((prev) => !prev)}
+                className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition-colors"
+              >
+                <Share2 className="w-3.5 h-3.5" />
+                <span>{showShareSection ? 'Hide Share Options' : 'Share Action (WhatsApp / X)'}</span>
+              </button>
+              <button
+                onClick={onClose}
+                className="px-4 py-2 rounded-xl text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-200 hover:bg-slate-300 transition-colors"
+              >
+                Close
+              </button>
+            </div>
           </div>
         ) : (
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3">

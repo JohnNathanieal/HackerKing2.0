@@ -10,6 +10,7 @@ import {
   Activity,
   Layers,
   Compass,
+  Trophy,
 } from 'lucide-react';
 import { useImpact } from '../context/ImpactContext';
 import { NewsCard } from './NewsCard';
@@ -25,6 +26,7 @@ export const NewsFeed: React.FC = () => {
     userLocation,
     setIsLocationPickerOpen,
     wallet,
+    setActiveTab,
   } = useImpact();
 
   const categories: { id: IssueCategory; label: string; icon: React.ElementType }[] = [
@@ -86,6 +88,20 @@ export const NewsFeed: React.FC = () => {
                 Points Available
               </div>
             </div>
+            <div className="w-px h-8 bg-white/20"></div>
+            <button
+              onClick={() => setActiveTab('leaderboard')}
+              className="text-center px-2 py-1 rounded-xl hover:bg-white/10 transition-colors focus:outline-none focus:ring-1 focus:ring-amber-300"
+              title="View Top 10 Community Champions"
+            >
+              <div className="flex items-center justify-center gap-1 text-xl font-black text-amber-300">
+                <Trophy className="w-4 h-4 text-amber-300" />
+                <span>Top 10</span>
+              </div>
+              <div className="text-[10px] font-bold uppercase tracking-wider text-emerald-200">
+                Champions
+              </div>
+            </button>
           </div>
         </div>
 

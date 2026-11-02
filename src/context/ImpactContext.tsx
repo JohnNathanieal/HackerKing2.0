@@ -31,8 +31,8 @@ interface ImpactContextType {
   toggleDarkMode: () => void;
 
   // Active view tab
-  activeTab: 'feed' | 'rewards' | 'wallet';
-  setActiveTab: (tab: 'feed' | 'rewards' | 'wallet') => void;
+  activeTab: 'feed' | 'rewards' | 'wallet' | 'leaderboard';
+  setActiveTab: (tab: 'feed' | 'rewards' | 'wallet' | 'leaderboard') => void;
 
   // Location Engine
   userLocation: {
@@ -121,8 +121,14 @@ export const ImpactProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       localStorage.setItem(LOCAL_STORAGE_THEME_KEY, isDarkMode ? 'dark' : 'light');
       if (isDarkMode) {
         document.documentElement.classList.add('dark');
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.body.classList.add('dark');
+        document.documentElement.style.colorScheme = 'dark';
       } else {
         document.documentElement.classList.remove('dark');
+        document.documentElement.setAttribute('data-theme', 'light');
+        document.body.classList.remove('dark');
+        document.documentElement.style.colorScheme = 'light';
       }
     } catch {
       // ignore
@@ -132,7 +138,7 @@ export const ImpactProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const toggleDarkMode = () => setIsDarkMode((prev) => !prev);
 
   // Active view tab
-  const [activeTab, setActiveTab] = useState<'feed' | 'rewards' | 'wallet'>('feed');
+  const [activeTab, setActiveTab] = useState<'feed' | 'rewards' | 'wallet' | 'leaderboard'>('feed');
 
   // Location Engine
   const [userLocation, setUserLocation] = useState<{

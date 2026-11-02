@@ -10,6 +10,7 @@ import {
   Newspaper,
   History,
   ShieldCheck,
+  Trophy,
 } from 'lucide-react';
 import { useImpact } from '../context/ImpactContext';
 
@@ -147,6 +148,21 @@ export const Header: React.FC = () => {
             <span>Rewards & Vouchers</span>
             <span className="ml-1 text-[10px] font-bold px-1.5 py-0.2 rounded-full bg-amber-400 text-amber-950">
               Store
+            </span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('leaderboard')}
+            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-sm font-semibold transition-all shrink-0 relative ${
+              activeTab === 'leaderboard'
+                ? 'bg-emerald-600 text-white shadow-xs'
+                : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
+            }`}
+          >
+            <Trophy className="w-4 h-4 text-amber-500" />
+            <span>Champions Leaderboard</span>
+            <span className="ml-1 text-[10px] font-bold px-1.5 py-0.2 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300">
+              Top 10
             </span>
           </button>
 
